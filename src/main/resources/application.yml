@@ -3,19 +3,19 @@ spring:
     oauth2:
       client:
         registration:
-          appid:
-            clientId: <<clientId>>
-            clientSecret: <<clientSecret>>
-            region: <<region>>
-            tenantId: <<tenantId>>
+          appid-client:
+            provider: appid-provider
+            clientId: ${OAUTH_CLIENT_ID}
+            clientSecret: ${OAUTH_CLIENT_SECRET}
+            authorization-grant-type: authorization_code
+            scope: openid,profile
+        provider:
+          appid-provider:
+            issuerUri: ${OAUTH_ISSUER_URI}
 
-# If you are not sure of the region and tenantId use the below configuration
-#spring:
-#  security:
-#    oauth2:
-#      client:
-#        registration:
-#          appid:
-#            clientId: <<clientId>>
-#            clientSecret: <<clientSecret>>
-#            issuerUri: <<issuerUri>>
+logging:
+  level:
+    org:
+      springframework:
+        security: INFO
+        boot: INFO

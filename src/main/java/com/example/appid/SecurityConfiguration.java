@@ -19,5 +19,4 @@ public class SecurityConfiguration {
                 .oauth2Login(Customizer.withDefaults());
         return http.build();
     }
-
 }
