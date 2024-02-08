@@ -1,0 +1,56 @@
+scheme: http
+resource-server-api-uri: localhost:7084
+#resource-server-api-uri: ${scheme}://localhost:7084
+
+client-permit-all: >
+  /login/**,
+  /oauth2/**,
+  /api/**,
+  /actuator/**
+  /error*/**
+
+spring:
+  security:
+    oauth2:
+      client:
+        registration:
+          appid-client:
+            provider: appid-provider
+            clientId: ${OAUTH_CLIENT_ID}
+            clientSecret: ${OAUTH_CLIENT_SECRET}
+            authorization-grant-type: authorization_code
+            scope: openid,profile
+        provider:
+          appid-provider:
+            issuerUri: ${OAUTH_ISSUER_URI}
+      resourceserver:
+        jwt:
+          issuer-uri: ${OAUTH_ISSUER_URI}
+  cloud:
+    gateway:
+      default-filters:
+        - DedupeResponseHeader=Access-Control-Allow-Credentials Access-Control-Allow-Origin Access-Control-Request-Headers
+        - SaveSession
+      routes:
+        # BFF access to resource-server API (with TokenRelay replacing session cookies with access tokens)
+        - id: resource-server
+          uri: http://localhost:7084
+          predicates:
+            - Path=/api/**
+          filters:
+            - TokenRelay=
+#            - StripPrefix=2
+management:
+  endpoints:
+    web:
+      exposure:
+        include: mappings
+
+logging:
+  level:
+    org:
+      springframework:
+        security: DEBUG
+        boot: DEBUG
+        cloud:
+          gateway: TRACE

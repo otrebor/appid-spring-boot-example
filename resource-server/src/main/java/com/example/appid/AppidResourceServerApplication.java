@@ -6,9 +6,9 @@ import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication
 @ComponentScan(basePackages = {"com.example"})
-public class AppidApplication {
+public class AppidResourceServerApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(AppidApplication.class, args);
+        SpringApplication.run(AppidResourceServerApplication.class, args);
     }
 }

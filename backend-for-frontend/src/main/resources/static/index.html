@@ -19,14 +19,14 @@
                     }
                 }
             });
-            $.get("/user", function(data) {
+            $.get("/api/v1/user", function(data) {
                 if (data.principal != null) {
                     $("#user").html(data.principal.attributes.name);
                     $("#userSub").html(data.principal.attributes.sub);
                     $("#userEmail").html(data.principal.attributes.email);
                     $("#provider").html(data.principal.attributes.identities[0].provider);
                     $(".unauthenticated").hide();
-                    $(".authenticated").show();	
+                    $(".authenticated").show();
                 } else {
                     $(".unauthenticated").show();
                     $(".authenticated").hide();
@@ -35,9 +35,9 @@
                 $(".unauthenticated").show();
                 $(".authenticated").hide();
             });
-	 
+
             <!-- In this case, we will call GET /userInfo, and this will give us back a string with userinfo details from Principal user -->
-            $.get("/userInfo", function(data) {
+            $.get("/api/v1/userInfo", function(data) {
                 if (data.includes("Principal")) {
                     $("#userInfoString").html(data);
                     $(".unauthenticated").hide();
@@ -50,7 +50,7 @@
                 $(".unauthenticated").show();
                 $(".authenticated").hide();
             });
-        </script> 
+        </script>
     </head>
     <body>
         <div class="container unauthenticated" style="text-align: center;">
