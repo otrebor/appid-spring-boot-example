@@ -16,9 +16,9 @@ import java.util.stream.Stream;
 public class SecurityConfiguration {
 
     @Bean
-    public SecurityFilterChain securityFilterChain(final HttpSecurity http, @Value("${client-permit-all:[]}") String[] permitAll) throws Exception {
+    public SecurityFilterChain securityFilterChain(final HttpSecurity http, final @Value("${client-permit-all:[]}") String[] permitAll) throws Exception {
 
-        http.authorizeRequests((authorize) ->
+        http.authorizeHttpRequests((authorize) ->
                         authorize.requestMatchers(Stream.of(permitAll).map(AntPathRequestMatcher::new)
                                         .toArray(AntPathRequestMatcher[]::new)).permitAll()
                         .anyRequest().authenticated())

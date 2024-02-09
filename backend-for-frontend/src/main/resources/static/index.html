@@ -19,7 +19,7 @@
                     }
                 }
             });
-            $.get("/api/v1/user", function(data) {
+            $.get("/user", function(data) {
                 if (data.principal != null) {
                     $("#user").html(data.principal.attributes.name);
                     $("#userSub").html(data.principal.attributes.sub);
@@ -37,9 +37,24 @@
             });
 
             <!-- In this case, we will call GET /userInfo, and this will give us back a string with userinfo details from Principal user -->
-            $.get("/api/v1/userInfo", function(data) {
+            $.get("/userInfo", function(data) {
                 if (data.includes("Principal")) {
                     $("#userInfoString").html(data);
+                    $(".unauthenticated").hide();
+                    $(".authenticated").show();
+                } else {
+                    $(".unauthenticated").show();
+                    $(".authenticated").hide();
+                }
+            }).fail(function() {
+                $(".unauthenticated").show();
+                $(".authenticated").hide();
+            });
+
+            <!-- In this case, we will call GET /api/v1/greetings, and this will give us back a string with a greeting from the backend -->
+            $.get("/api/v1/greeting", function(data) {
+                if (data.message != null) {
+                    $("#greetingsString").html(data);
                     $(".unauthenticated").hide();
                     $(".authenticated").show();
                 } else {
@@ -71,6 +86,8 @@
             <br>
             <span id="userInfoString"></span>
             <br>
+            <br>
+            <span id="greetingsString"></span>
             <br>
 	   </div>
     </body>

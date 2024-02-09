@@ -1,13 +1,15 @@
 scheme: http
-resource-server-api-uri: localhost:7084
-#resource-server-api-uri: ${scheme}://localhost:7084
+resource-server-api-uri: ${scheme}://localhost:7084
 
 client-permit-all: >
   /login/**,
   /oauth2/**,
   /api/**,
   /actuator/**
-  /error*/**
+
+
+server:
+  max-http-request-header-size : 10MB
 
 spring:
   security:
@@ -28,18 +30,20 @@ spring:
           issuer-uri: ${OAUTH_ISSUER_URI}
   cloud:
     gateway:
-      default-filters:
-        - DedupeResponseHeader=Access-Control-Allow-Credentials Access-Control-Allow-Origin Access-Control-Request-Headers
-        - SaveSession
-      routes:
-        # BFF access to resource-server API (with TokenRelay replacing session cookies with access tokens)
-        - id: resource-server
-          uri: http://localhost:7084
-          predicates:
-            - Path=/api/**
-          filters:
-            - TokenRelay=
-#            - StripPrefix=2
+      mvc:
+        default-filters:
+          - DedupeResponseHeader=Access-Control-Allow-Credentials Access-Control-Allow-Origin Access-Control-Request-Headers
+          - SaveSession
+#        routes:
+#          # BFF access to resource-server API (with TokenRelay replacing session cookies with access tokens)
+#          - id: resource-server
+#            uri: http://localhost:7084
+#            predicates:
+#              - Path=/api/**
+#            filters:
+#             - TokenRelay=
+#  #            - StripPrefix=2
+
 management:
   endpoints:
     web:
